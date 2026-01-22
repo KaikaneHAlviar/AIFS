@@ -1,33 +1,42 @@
-# Define the source and destination paths relative to the script location
-$srcPath = Join-Path $PSScriptRoot "src"
-$destPath = Join-Path $PSScriptRoot "docs"
+# 1. Establish the Repo Root
+# $PSScriptRoot is the folder where this script lives (AIFS/scripts)
+# We go up ONE level to reach the AIFS root
+$RepoRoot = Resolve-Path "$PSScriptRoot\.."
 
-# Ensure the docs directory exists before copying
-if (!(Test-Path -Path $destPath)) {
-    New-Item -ItemType Directory -Path $destPath | Out-Null
-    Write-Host "Created missing destination folder: $destPath" -ForegroundColor Cyan
+$SrcPath = Join-Path $RepoRoot "src"
+$DestPath = Join-Path $RepoRoot "docs"
+
+Write-Host "--- Deployment Started ---" -ForegroundColor Cyan
+Write-Host "Targeting Root: $RepoRoot"
+Write-Host "Source:         $SrcPath"
+Write-Host "Destination:    $DestPath"
+Write-Host "--------------------------"
+
+# Ensure the docs directory exists
+if (!(Test-Path $DestPath)) {
+    New-Item -ItemType Directory -Path $DestPath | Out-Null
 }
 
-# 1. Copy contents of pages, css, and js directly into docs/
-$flatFolders = @("pages", "css", "js")
+# 2. Handle 'css', 'js', and 'pages' (Copy CONTENTS only)
+$FlatFolders = @("css", "js", "pages")
 
-foreach ($folder in $flatFolders) {
-    $currentFolder = Join-Path $srcPath $folder
-    if (Test-Path $currentFolder) {
-        Write-Host "Deploying contents of $folder..." -ForegroundColor Green
-        # Copy-Item contents (*) to the destination
-        Copy-Item -Path "$currentFolder\*" -Destination $destPath -Recurse -Force
+foreach ($folderName in $FlatFolders) {
+    $currentSrc = Join-Path $SrcPath $folderName
+    if (Test-Path $currentSrc) {
+        Write-Host "Copying contents of $folderName..."
+        # \* ensures files like index.html go into /docs/ directly
+        Copy-Item -Path "$currentSrc\*" -Destination $DestPath -Recurse -Force
     } else {
-        Write-Warning "Source folder not found: $currentFolder"
+        Write-Warning "Could not find source: $currentSrc"
     }
 }
 
-# 2. Copy the assets folder itself into docs/
-$assetsSrc = Join-Path $srcPath "assets"
-if (Test-Path $assetsSrc) {
-    Write-Host "Deploying assets folder..." -ForegroundColor Green
-    # Removing the \* ensures the folder 'assets' is copied, not just its contents
-    Copy-Item -Path $assetsSrc -Destination $destPath -Recurse -Force
+# 3. Handle 'assets' (Copy the FOLDER itself)
+$AssetsSrc = Join-Path $SrcPath "assets"
+if (Test-Path $AssetsSrc) {
+    Write-Host "Copying 'assets' folder..."
+    # No wildcard means the 'assets' folder is created inside 'docs'
+    Copy-Item -Path $AssetsSrc -Destination $DestPath -Recurse -Force
 }
 
-Write-Host "Deployment to /docs complete!" -ForegroundColor White -BackgroundColor DarkGreen
+Write-Host "Deployment Successful!" -ForegroundColor Green
