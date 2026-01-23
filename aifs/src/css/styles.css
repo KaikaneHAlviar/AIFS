@@ -4,7 +4,6 @@
   --muted: #6b7280;
   --border: #e5e7eb;
 
-  /* PMC-like purple accent */
   --accent: #7c3aed;
   --accent-2: #a78bfa;
 
@@ -107,10 +106,9 @@ img { width: 100%; height: auto; display: block; border-radius: 12px; }
   gap: 8px;
 }
 
-.nav__mobile a {
-  padding: 10px 10px;
-  border-radius: 12px;
-}
+.nav__mobile[hidden] {display: none !important; }
+
+.nav__mobile a {padding: 10px 10px;border-radius: 12px;}
 .nav__mobile a:hover { background: #f3f4f6; }
 
 /* HERO */
@@ -125,7 +123,7 @@ img { width: 100%; height: auto; display: block; border-radius: 12px; }
 .hero__bg {
   position: absolute;
   inset: 0;
-  /* Replace with your own wide hero image later */
+  /* Replace with wide hero image later */
   background-image: url("https://picsum.photos/seed/aifs-hero/1900/900");
   background-size: cover;
   background-position: center;
@@ -309,13 +307,13 @@ img { width: 100%; height: auto; display: block; border-radius: 12px; }
   .gallery { grid-template-columns: 1fr; }
 }
 
-/* ===== Active nav link (optional, small) ===== */
+/* ===== Active nav link ===== */
 .is-active {
   color: var(--accent);
   font-weight: 800;
 }
 
-/* ===== Generic page hero wrapper (PM-club vibe) ===== */
+/* ===== Generic page hero wrapper ===== */
 .page-hero {
   padding: 54px 0 64px;
 }
@@ -384,7 +382,7 @@ img { width: 100%; height: auto; display: block; border-radius: 12px; }
   border: 1px solid rgba(229, 231, 235, 0.9);
 }
 
-/* ===== Section rule under headers (PM-club line) ===== */
+/* ===== Section rule under headers ===== */
 .section__rule {
   height: 1px;
   width: min(520px, 80%);
