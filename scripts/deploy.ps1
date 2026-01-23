@@ -1,30 +1,19 @@
 $RepoRoot = Resolve-Path "$PSScriptRoot\.."
+Set-Location $RepoRoot
 
-$SrcPath = Join-Path $RepoRoot "src"
-$DestPath = Join-Path $RepoRoot "docs"
+Write-Host "Building with Vite into docs/ ..." -ForegroundColor Cyan
 
-if (!(Test-Path $DestPath)) {
-    New-Item -ItemType Directory -Path $DestPath | Out-Null
+# optional: ensures deps are installed
+if (!(Test-Path (Join-Path $RepoRoot "node_modules"))) {
+  Write-Host "node_modules not found; installing dependencies..." -ForegroundColor Yellow
+  npm install
 }
 
-# 2. Handle 'css', 'js', and 'pages'
-$FlatFolders = @("css", "js", "pages")
+npm run build
 
-foreach ($folderName in $FlatFolders) {
-    $currentSrc = Join-Path $SrcPath $folderName
-    if (Test-Path $currentSrc) {
-        Write-Host "Copying contents of $folderName..."
-        Copy-Item -Path "$currentSrc\*" -Destination $DestPath -Recurse -Force
-    } else {
-        Write-Warning "Could not find source: $currentSrc"
-    }
+if ($LASTEXITCODE -ne 0) {
+  Write-Error "Build failed. Aborting deploy."
+  exit 1
 }
 
-# 3. Handle 'assets' folder
-$AssetsSrc = Join-Path $SrcPath "assets"
-if (Test-Path $AssetsSrc) {
-    Write-Host "Copying 'assets' folder..."
-    Copy-Item -Path $AssetsSrc -Destination $DestPath -Recurse -Force
-}
-
-Write-Host "Deployment Successful!" -ForegroundColor Green
+Write-Host "Deployment build complete! docs/ is ready for GitHub Pages." -ForegroundColor Green

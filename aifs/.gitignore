@@ -1,4 +1,10 @@
-# Logs
+# dependencies
+node_modules/
+
+# production build output
+dist/
+
+# logs
 logs
 *.log
 npm-debug.log*
@@ -17,6 +23,7 @@ dist-ssr
 !.vscode/extensions.json
 .idea
 .DS_Store
+Thumbs.db
 *.suo
 *.ntvs*
 *.njsproj
