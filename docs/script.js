@@ -1,3 +1,5 @@
+
+// EVENT CARDS
 const events = [
     {
         title: "Careers in AI Panel",
@@ -15,8 +17,17 @@ const events = [
         image: "https://picsum.photos/seed/aifs-event-2/900/600",
         url: "#",
     },
+    {
+        title: "RSO Meeting",
+        date: "Recurring Weekly on Wednesdays",
+        time: "05:30PM - 07:00PM",
+        location: "MOR 220",
+        image: "https://picsum.photos/seed/aifs-event-2/900/600",
+        url: "#",
+    },
 ];
 
+// RENDER EVENTS
 function renderEvents() {
     const grid = document.getElementById("eventsGrid");
     if (!grid) return;
@@ -43,6 +54,7 @@ grid.innerHTML = events
     .join("");
 }
 
+// MOBILE MENU
 function setupMobileMenu() {
     const btn = document.getElementById("hamburger");
     const menu = document.getElementById("mobileMenu");
@@ -59,7 +71,7 @@ function setupMobileMenu() {
         }
 });
 
-  // Close menu when you click a link
+  // Close menu when click a link
 menu.addEventListener("click", (e) => {
     if (e.target.tagName === "A") {
     menu.setAttribute("hidden", "");
